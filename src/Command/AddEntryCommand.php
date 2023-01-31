@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Keychain Package
  *
@@ -20,81 +21,79 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class AddEntryCommand extends AbstractKeychainCommand
 {
-	/**
-	 * The default command name
-	 *
-	 * @var    string|null
-	 * @since  2.0.0
-	 */
-	protected static $defaultName = 'keychain:add-entry';
+    /**
+     * The default command name
+     *
+     * @var    string|null
+     * @since  2.0.0
+     */
+    protected static $defaultName = 'keychain:add-entry';
 
-	/**
-	 * Internal function to execute the command.
-	 *
-	 * @param   InputInterface   $input   The input to inject into the command.
-	 * @param   OutputInterface  $output  The output to inject into the command.
-	 *
-	 * @return  integer  The command exit code
-	 *
-	 * @since   2.0.0
-	 */
-	protected function doExecute(InputInterface $input, OutputInterface $output): int
-	{
-		$symfonyStyle = new SymfonyStyle($input, $output);
-		$symfonyStyle->title('Add Keychain Entry');
+    /**
+     * Internal function to execute the command.
+     *
+     * @param   InputInterface   $input   The input to inject into the command.
+     * @param   OutputInterface  $output  The output to inject into the command.
+     *
+     * @return  integer  The command exit code
+     *
+     * @since   2.0.0
+     */
+    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    {
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle->title('Add Keychain Entry');
 
-		$entryName  = $input->getArgument('entry-name');
-		$entryValue = $input->getArgument('entry-value');
+        $entryName  = $input->getArgument('entry-name');
+        $entryValue = $input->getArgument('entry-value');
 
-		if ($this->keychain->exists($entryName))
-		{
-			$symfonyStyle->warning(
-				sprintf(
-					'An entry already exists with the key `%s`, use the `keychain:edit-entry` command to edit it.',
-					$entryName
-				)
-			);
+        if ($this->keychain->exists($entryName)) {
+            $symfonyStyle->warning(
+                sprintf(
+                    'An entry already exists with the key `%s`, use the `keychain:edit-entry` command to edit it.',
+                    $entryName
+                )
+            );
 
-			return 1;
-		}
+            return 1;
+        }
 
-		$this->keychain->set($entryName, $entryValue);
+        $this->keychain->set($entryName, $entryValue);
 
-		if (!$this->saveKeychain())
-		{
-			$symfonyStyle->error('The entry was not added to the keychain.');
+        if (!$this->saveKeychain()) {
+            $symfonyStyle->error('The entry was not added to the keychain.');
 
-			return 1;
-		}
+            return 1;
+        }
 
-		$symfonyStyle->success('The entry was added to the keychain.');
+        $symfonyStyle->success('The entry was added to the keychain.');
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Configure the command.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function configure(): void
-	{
-		parent::configure();
+    /**
+     * Configure the command.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function configure(): void
+    {
+        parent::configure();
 
-		$this->setDescription('Adds an entry to the keychain');
+        $this->setDescription('Adds an entry to the keychain');
 
-		$this->addArgument(
-			'entry-name',
-			InputArgument::REQUIRED,
-			'The key to use for the entry'
-		);
+        $this->addArgument(
+            'entry-name',
+            InputArgument::REQUIRED,
+            'The key to use for the entry'
+        );
 
-		$this->addArgument(
-			'entry-value',
-			InputArgument::REQUIRED,
-			'The value of the entry'
-		);
-	}
+        $this->addArgument(
+            'entry-value',
+            InputArgument::REQUIRED,
+            'The value of the entry'
+        );
+    }
 }

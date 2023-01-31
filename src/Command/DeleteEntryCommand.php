@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Keychain Package
  *
@@ -20,74 +21,72 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class DeleteEntryCommand extends AbstractKeychainCommand
 {
-	/**
-	 * The default command name
-	 *
-	 * @var    string|null
-	 * @since  2.0.0
-	 */
-	protected static $defaultName = 'keychain:delete-entry';
+    /**
+     * The default command name
+     *
+     * @var    string|null
+     * @since  2.0.0
+     */
+    protected static $defaultName = 'keychain:delete-entry';
 
-	/**
-	 * Internal function to execute the command.
-	 *
-	 * @param   InputInterface   $input   The input to inject into the command.
-	 * @param   OutputInterface  $output  The output to inject into the command.
-	 *
-	 * @return  integer  The command exit code
-	 *
-	 * @since   2.0.0
-	 */
-	protected function doExecute(InputInterface $input, OutputInterface $output): int
-	{
-		$symfonyStyle = new SymfonyStyle($input, $output);
-		$symfonyStyle->title('Delete Keychain Entry');
+    /**
+     * Internal function to execute the command.
+     *
+     * @param   InputInterface   $input   The input to inject into the command.
+     * @param   OutputInterface  $output  The output to inject into the command.
+     *
+     * @return  integer  The command exit code
+     *
+     * @since   2.0.0
+     */
+    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    {
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle->title('Delete Keychain Entry');
 
-		$entryName = $input->getArgument('entry-name');
+        $entryName = $input->getArgument('entry-name');
 
-		if (!$this->keychain->exists($entryName))
-		{
-			$symfonyStyle->note(
-				sprintf(
-					'There is no entry in the keychain with the key `%s`.',
-					$entryName
-				)
-			);
+        if (!$this->keychain->exists($entryName)) {
+            $symfonyStyle->note(
+                sprintf(
+                    'There is no entry in the keychain with the key `%s`.',
+                    $entryName
+                )
+            );
 
-			return 0;
-		}
+            return 0;
+        }
 
-		$this->keychain->remove($entryName);
+        $this->keychain->remove($entryName);
 
-		if (!$this->saveKeychain())
-		{
-			$symfonyStyle->error('The entry was not removed from the keychain.');
+        if (!$this->saveKeychain()) {
+            $symfonyStyle->error('The entry was not removed from the keychain.');
 
-			return 1;
-		}
+            return 1;
+        }
 
-		$symfonyStyle->success('The entry was removed from the keychain.');
+        $symfonyStyle->success('The entry was removed from the keychain.');
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Configure the command.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function configure(): void
-	{
-		parent::configure();
+    /**
+     * Configure the command.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function configure(): void
+    {
+        parent::configure();
 
-		$this->setDescription('Deletes an entry in the keychain');
+        $this->setDescription('Deletes an entry in the keychain');
 
-		$this->addArgument(
-			'entry-name',
-			InputArgument::REQUIRED,
-			'The key to remove from the keychain'
-		);
-	}
+        $this->addArgument(
+            'entry-name',
+            InputArgument::REQUIRED,
+            'The key to remove from the keychain'
+        );
+    }
 }

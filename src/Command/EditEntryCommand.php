@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Keychain Package
  *
@@ -20,69 +21,68 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class EditEntryCommand extends AbstractKeychainCommand
 {
-	/**
-	 * The default command name
-	 *
-	 * @var    string|null
-	 * @since  2.0.0
-	 */
-	protected static $defaultName = 'keychain:edit-entry';
+    /**
+     * The default command name
+     *
+     * @var    string|null
+     * @since  2.0.0
+     */
+    protected static $defaultName = 'keychain:edit-entry';
 
-	/**
-	 * Internal function to execute the command.
-	 *
-	 * @param   InputInterface   $input   The input to inject into the command.
-	 * @param   OutputInterface  $output  The output to inject into the command.
-	 *
-	 * @return  integer  The command exit code
-	 *
-	 * @since   2.0.0
-	 */
-	protected function doExecute(InputInterface $input, OutputInterface $output): int
-	{
-		$symfonyStyle = new SymfonyStyle($input, $output);
-		$symfonyStyle->title('Edit Keychain Entry');
+    /**
+     * Internal function to execute the command.
+     *
+     * @param   InputInterface   $input   The input to inject into the command.
+     * @param   OutputInterface  $output  The output to inject into the command.
+     *
+     * @return  integer  The command exit code
+     *
+     * @since   2.0.0
+     */
+    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    {
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle->title('Edit Keychain Entry');
 
-		$entryName  = $input->getArgument('entry-name');
-		$entryValue = $input->getArgument('entry-value');
+        $entryName  = $input->getArgument('entry-name');
+        $entryValue = $input->getArgument('entry-value');
 
-		$this->keychain->set($entryName, $entryValue);
+        $this->keychain->set($entryName, $entryValue);
 
-		if (!$this->saveKeychain())
-		{
-			$symfonyStyle->error('The entry was not edited in the keychain.');
+        if (!$this->saveKeychain()) {
+            $symfonyStyle->error('The entry was not edited in the keychain.');
 
-			return 1;
-		}
+            return 1;
+        }
 
-		$symfonyStyle->success('The entry was edited in the keychain.');
+        $symfonyStyle->success('The entry was edited in the keychain.');
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Configure the command.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function configure(): void
-	{
-		parent::configure();
+    /**
+     * Configure the command.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function configure(): void
+    {
+        parent::configure();
 
-		$this->setDescription('Edits an entry in the keychain');
+        $this->setDescription('Edits an entry in the keychain');
 
-		$this->addArgument(
-			'entry-name',
-			InputArgument::REQUIRED,
-			'The key to use for the entry'
-		);
+        $this->addArgument(
+            'entry-name',
+            InputArgument::REQUIRED,
+            'The key to use for the entry'
+        );
 
-		$this->addArgument(
-			'entry-value',
-			InputArgument::REQUIRED,
-			'The value of the entry'
-		);
-	}
+        $this->addArgument(
+            'entry-value',
+            InputArgument::REQUIRED,
+            'The value of the entry'
+        );
+    }
 }

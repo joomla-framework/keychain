@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Keychain Package
  *
@@ -20,75 +21,72 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ListEntriesCommand extends AbstractKeychainCommand
 {
-	/**
-	 * The default command name
-	 *
-	 * @var    string|null
-	 * @since  2.0.0
-	 */
-	protected static $defaultName = 'keychain:list';
+    /**
+     * The default command name
+     *
+     * @var    string|null
+     * @since  2.0.0
+     */
+    protected static $defaultName = 'keychain:list';
 
-	/**
-	 * Internal function to execute the command.
-	 *
-	 * @param   InputInterface   $input   The input to inject into the command.
-	 * @param   OutputInterface  $output  The output to inject into the command.
-	 *
-	 * @return  integer  The command exit code
-	 *
-	 * @since   2.0.0
-	 */
-	protected function doExecute(InputInterface $input, OutputInterface $output): int
-	{
-		$symfonyStyle = new SymfonyStyle($input, $output);
-		$symfonyStyle->title('List Keychain Entries');
+    /**
+     * Internal function to execute the command.
+     *
+     * @param   InputInterface   $input   The input to inject into the command.
+     * @param   OutputInterface  $output  The output to inject into the command.
+     *
+     * @return  integer  The command exit code
+     *
+     * @since   2.0.0
+     */
+    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    {
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle->title('List Keychain Entries');
 
-		$printValues = $input->getOption('print-values');
+        $printValues = $input->getOption('print-values');
 
-		$rows = [];
+        $rows = [];
 
-		foreach ($this->keychain->toArray() as $key => $value)
-		{
-			$row = [$key];
+        foreach ($this->keychain->toArray() as $key => $value) {
+            $row = [$key];
 
-			if ($printValues)
-			{
-				$row[] = $value;
-			}
+            if ($printValues) {
+                $row[] = $value;
+            }
 
-			$rows[] = $row;
-		}
+            $rows[] = $row;
+        }
 
-		$headers = ['Key'];
+        $headers = ['Key'];
 
-		if ($printValues)
-		{
-			$headers[] = 'Value';
-		}
+        if ($printValues) {
+            $headers[] = 'Value';
+        }
 
-		$symfonyStyle->table($headers, $rows);
+        $symfonyStyle->table($headers, $rows);
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Configure the command.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function configure(): void
-	{
-		parent::configure();
+    /**
+     * Configure the command.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function configure(): void
+    {
+        parent::configure();
 
-		$this->setDescription('Lists all entries in the keychain');
+        $this->setDescription('Lists all entries in the keychain');
 
-		$this->addOption(
-			'print-values',
-			null,
-			InputOption::VALUE_NONE,
-			"Flag indicating the keychain's values should be printed"
-		);
-	}
+        $this->addOption(
+            'print-values',
+            null,
+            InputOption::VALUE_NONE,
+            "Flag indicating the keychain's values should be printed"
+        );
+    }
 }
