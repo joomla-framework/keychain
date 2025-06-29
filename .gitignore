@@ -1,11 +1,16 @@
-build/
-vendor/
+# IDE Related Files #
+.buildpath
+.project
+.settings
+.DS_Store
 .idea
+
+# Composer and test related files #
+vendor/
 composer.phar
 composer.lock
 phpunit.xml
-.phpunit.result.cache
-
-# Temporary test data
-Tests/data/tmp/*
-!Tests/data/tmp/.gitkeep
+.phpunit.cache/
+.idea/
+/.phpunit.result.cache
+/.phpunit.cache/
