@@ -1,4 +1,4 @@
-## The Keychain Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/keychain/status.svg?ref=refs/heads/3.x-dev)](https://ci.joomla.org/joomla-framework/keychain)
+## The Keychain Package [![Build Status](https://github.com/joomla-framework/keychain/actions/workflows/ci.yml/badge.svg?branch=3.x-dev)](https://github.com/joomla-framework/keychain)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/keychain/v/stable)](https://packagist.org/packages/joomla/keychain)
 [![Total Downloads](https://poser.pugx.org/joomla/keychain/downloads)](https://packagist.org/packages/joomla/keychain)
@@ -16,7 +16,7 @@ The Keychain package is an extension of the [Registry](https://github.com/joomla
 ## Installation
 
 To install the package, you can run the following from the command line:
-           
+
 ```sh
 composer require joomla/keychain "~3.0"
 ```
