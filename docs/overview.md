@@ -56,3 +56,47 @@ $keychain->saveKeychain('/path/to/keychain.file');
 ### Command line management
 
 A keychain can optionally be managed if your application integrates the [Console](https://github.com/joomla-framework/console) package, please review the [command line management](features/command-line-management.md) page for more information.
+
+## Things to know before you build on this
+
+**The keychain file is written with default permissions.** `saveKeychain()` calls
+`file_put_contents()` without adjusting the mode, so with a typical umask the file ends up
+world-readable. Tighten it yourself after saving:
+
+```php
+$keychain->saveKeychain($file);
+chmod($file, 0600);
+```
+
+**Writes are not atomic and not locked.** A crash mid-write leaves an unreadable keychain, and two
+processes saving at once will lose one set of changes. If that matters, write to a temporary file
+and `rename()` it into place.
+
+**Load errors are not reported.** `loadKeychain()` checks that the file exists but not that it
+could be read, and does not check the result of `json_decode()`. With a cipher that does not
+authenticate its ciphertext, a corrupted or tampered file decrypts to noise and yields an empty
+keychain rather than an error — so a missing entry can mean "not set" or "file damaged".
+
+```php
+$keychain->loadKeychain($file);
+
+if ($keychain->get('expected-key') === null) {
+    // Cannot tell a missing entry from a damaged file. Check explicitly if it matters.
+}
+```
+
+**The class extends `Registry`.** That brings `loadFile()`, `loadString()`, `toString()`,
+`__toString()` and `jsonSerialize()` along with it — all of which read or write **unencrypted**
+data. A stray `json_encode($keychain)` or string interpolation writes every secret in clear text.
+Treat the object as write-only outside of `get()`.
+
+**Secrets on the command line are visible to other users.** `keychain:add-entry` and
+`keychain:edit-entry` take the value as an argument, and command lines are readable through `ps`
+and land in the shell history. Prefer piping the value in, or set it from PHP.
+
+**There is no `keychain:create`.** Every command requires the file to exist already, so the first
+entry cannot be added through the CLI. Create the file from PHP once:
+
+```php
+(new Keychain($crypt))->saveKeychain('/path/to/keychain.dat');
+```
