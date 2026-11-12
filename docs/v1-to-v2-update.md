@@ -35,3 +35,10 @@ $crypt = new Crypt($cipher, $key);
 
 $keychain = new Keychain($crypt);
 ```
+
+> The example above mirrors the v1 configuration, which is why it uses `Cipher\OpenSSL`. That
+> cipher reuses one initialisation vector for every value, does not authenticate the ciphertext,
+> and uses the passphrase directly as the key with no derivation. For a new keychain use
+> `Joomla\Crypt\Cipher\Crypto` instead — see
+> [Updating from v3 to v4](v3-to-v4-update.md#worth-doing-while-you-are-here) for how to migrate an
+> existing one.
